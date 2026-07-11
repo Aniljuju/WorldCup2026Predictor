@@ -1,4 +1,6 @@
 import pandas as pd
+import joblib
+
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -86,3 +88,13 @@ print(classification_report(y_test, predictions))
 
 print("\nConfusion Matrix")
 print(confusion_matrix(y_test, predictions))
+
+# Save the trained model
+joblib.dump(model, "models/random_forest.pkl")
+
+print("\nModel saved successfully!")
+# Save encoders
+joblib.dump(team_encoder, "models/team_encoder.pkl")
+joblib.dump(winner_encoder, "models/winner_encoder.pkl")
+
+print("Encoders saved successfully!")
