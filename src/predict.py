@@ -13,3 +13,11 @@ print("✅ Winner encoder loaded successfully!")
 
 home_team = input("Enter Home Team: ")
 away_team = input("Enter Away Team: ")
+
+# Encode the team names
+home_encoded = team_encoder.transform([home_team])[0]
+away_encoded = team_encoder.transform([away_team])[0]
+
+print("\nEncoded Teams")
+print(f"{home_team} -> {home_encoded}")
+print(f"{away_team} -> {away_encoded}")
