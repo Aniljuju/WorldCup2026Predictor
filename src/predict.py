@@ -30,6 +30,14 @@ match = pd.DataFrame(
 
 # Predict the winner
 prediction = model.predict(match)
+probabilities = model.predict_proba(match)
+
+print("\nClasses:")
+print(winner_encoder.classes_)
+
+print("\nPrediction Probabilities:")
+for label, prob in zip(winner_encoder.classes_, probabilities[0]):
+    print(f"{label}: {prob:.2%}")
 
 # Decode prediction
 result = winner_encoder.inverse_transform(prediction)[0]
