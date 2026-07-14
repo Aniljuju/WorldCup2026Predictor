@@ -1,45 +1,42 @@
 from predict import predict_match
 
-print("🏆 FIFA World Cup 2026 - Round of 32\n")
+
+def simulate_round(teams, round_name):
+    print(f"\n🏆 {round_name}\n")
+
+    winners = []
+
+    for i in range(0, len(teams), 2):
+        home = teams[i]
+        away = teams[i + 1]
+
+        winner = predict_match(home, away)
+
+        print(f"{home} vs {away}")
+        print(f"Winner: {winner}")
+        print("-" * 40)
+
+        winners.append(winner)
+
+    return winners
+
+
+# ----------------------------
+# Official Round of 32 (for now use a sample)
+# ----------------------------
 
 round_of_32 = [
-    ("South Africa", "Canada"),
-    ("Germany", "Paraguay"),
-    ("Netherlands", "Morocco"),
-    ("Brazil", "Japan"),
+    "South Africa", "Canada",
+    "Germany", "Paraguay",
+    "Netherlands", "Morocco",
+    "Brazil", "Japan"
 ]
 
-winners = []
+# Round of 32
+round16 = simulate_round(round_of_32, "Round of 32")
 
-for home, away in round_of_32:
-    print(f"\n{home} vs {away}")
-
-    winner = predict_match(home, away)
-
-    print(f"Winner: {winner}")
-    print("-" * 40)
-
-    winners.append(winner)
-
-print("\n🏆 Teams advancing to the Round of 16")
-print(winners)
-
-print("\n🏆 Round of 16\n")
-
-round_of_16_winners = []
-
-for i in range(0, len(winners), 2):
-
-    home = winners[i]
-    away = winners[i + 1]
-
-    winner = predict_match(home, away)
-
-    print(f"{home} vs {away}")
-    print(f"Winner: {winner}")
-    print("-" * 40)
-
-    round_of_16_winners.append(winner)
+# Round of 16
+quarterfinals = simulate_round(round16, "Round of 16")
 
 print("\nTeams advancing to Quarterfinals")
-print(round_of_16_winners)
+print(quarterfinals)
