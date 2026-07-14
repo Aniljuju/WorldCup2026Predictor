@@ -21,22 +21,46 @@ def simulate_round(teams, round_name):
     return winners
 
 
-# ----------------------------
-# Official Round of 32 (for now use a sample)
-# ----------------------------
+# ============================================
+# OFFICIAL WORLD CUP 2026 ROUND OF 32 TEAMS
+# (ordered according to the knockout bracket)
+# ============================================
 
-round_of_32 = [
+teams = [
     "South Africa", "Canada",
     "Germany", "Paraguay",
     "Netherlands", "Morocco",
-    "Brazil", "Japan"
+    "Brazil", "Japan",
+    "France", "Sweden",
+    "Norway", "Ivory Coast",
+    "Mexico", "Ecuador",
+    "England", "DR Congo",
+    "United States", "Bosnia and Herzegovina",
+    "Belgium", "Senegal",
+    "Portugal", "Croatia",
+    "Spain", "Austria",
+    "Switzerland", "Algeria",
+    "Australia", "Egypt",
+    "Argentina", "Cape Verde",
+    "Colombia", "Ghana"
 ]
 
-# Round of 32
-round16 = simulate_round(round_of_32, "Round of 32")
+# Round of 32 (32 -> 16)
+round16 = simulate_round(teams, "Round of 32")
 
-# Round of 16
+# Round of 16 (16 -> 8)
 quarterfinals = simulate_round(round16, "Round of 16")
 
-print("\nTeams advancing to Quarterfinals")
-print(quarterfinals)
+# Quarterfinals (8 -> 4)
+semifinals = simulate_round(quarterfinals, "Quarterfinals")
+
+# Semifinals (4 -> 2)
+finalists = simulate_round(semifinals, "Semifinals")
+
+# Final (2 -> 1)
+champion = simulate_round(finalists, "Final")
+
+print("\n" + "=" * 50)
+print("🏆 FIFA WORLD CUP 2026 CHAMPION 🏆")
+print("=" * 50)
+print(f"\nChampion: {champion[0]}")

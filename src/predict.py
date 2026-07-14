@@ -37,10 +37,20 @@ def predict_match(home_team, away_team):
 
     if result == "Home":
         return home_team
+
     elif result == "Away":
         return away_team
+
     else:
-        return "Draw"
+        # Knockout rule: if the model predicts a draw,
+        # advance the team with the higher win probability.
+        home_prob = probabilities[0][list(winner_encoder.classes_).index("Home")]
+        away_prob = probabilities[0][list(winner_encoder.classes_).index("Away")]
+
+        if home_prob >= away_prob:
+            return home_team
+        else:
+            return away_team
 
 
 if __name__ == "__main__":
