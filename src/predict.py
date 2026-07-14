@@ -13,26 +13,29 @@ print("✅ Team encoder loaded successfully!")
 print("✅ Winner encoder loaded successfully!")
 
 
-def predict_match(home_team, away_team):
-    # Encode the team names
+def predict_match(home_team, away_team, show_probabilities=True):
+
+    # Encode teams
     home_encoded = team_encoder.transform([home_team])[0]
     away_encoded = team_encoder.transform([away_team])[0]
 
-    # Create input for the model
+    # Create dataframe
     match = pd.DataFrame(
         [[home_encoded, away_encoded]],
         columns=["home_team", "away_team"]
     )
 
-    # Predict the winner
+    # Predict
     prediction = model.predict(match)
     probabilities = model.predict_proba(match)
 
-    print("\nPrediction Probabilities:")
-    for label, prob in zip(winner_encoder.classes_, probabilities[0]):
-        print(f"{label}: {prob:.2%}")
+    # Show probabilities only if requested
+    if show_probabilities:
+        print("\nPrediction Probabilities:")
+        for label, prob in zip(winner_encoder.classes_, probabilities[0]):
+            print(f"{label}: {prob:.2%}")
 
-    # Decode prediction
+    # Decode result
     result = winner_encoder.inverse_transform(prediction)[0]
 
     if result == "Home":
@@ -42,10 +45,13 @@ def predict_match(home_team, away_team):
         return away_team
 
     else:
-        # Knockout rule: if the model predicts a draw,
-        # advance the team with the higher win probability.
+        # Knockout tie-break
         home_prob = probabilities[0][list(winner_encoder.classes_).index("Home")]
         away_prob = probabilities[0][list(winner_encoder.classes_).index("Away")]
+
+        if show_probabilities:
+            print("\nMatch drawn after 90 minutes.")
+            print("Penalty Shootout decides the winner!")
 
         if home_prob >= away_prob:
             return home_team
@@ -54,6 +60,7 @@ def predict_match(home_team, away_team):
 
 
 if __name__ == "__main__":
+
     home_team = input("Enter Home Team: ")
     away_team = input("Enter Away Team: ")
 
@@ -62,4 +69,4 @@ if __name__ == "__main__":
     print("\n🏆 Match Prediction")
     print(f"Home Team : {home_team}")
     print(f"Away Team : {away_team}")
-    print(f"\nWinner: {winner}")
+    print(f"Winner    : {winner}")

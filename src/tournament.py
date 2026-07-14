@@ -10,7 +10,7 @@ def simulate_round(teams, round_name):
         home = teams[i]
         away = teams[i + 1]
 
-        winner = predict_match(home, away)
+        winner = predict_match(home, away, show_probabilities=False)
 
         print(f"{home} vs {away}")
         print(f"Winner: {winner}")
@@ -60,7 +60,8 @@ finalists = simulate_round(semifinals, "Semifinals")
 # Final (2 -> 1)
 champion = simulate_round(finalists, "Final")
 
-print("\n" + "=" * 50)
-print("🏆 FIFA WORLD CUP 2026 CHAMPION 🏆")
-print("=" * 50)
-print(f"\nChampion: {champion[0]}")
+print("\n" + "=" * 60)
+print("🏆 FIFA WORLD CUP 2026")
+print("=" * 60)
+print(f"\n🥇 WORLD CHAMPION: {champion[0].upper()}")
+print("=" * 60)
