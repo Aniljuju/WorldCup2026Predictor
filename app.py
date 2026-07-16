@@ -1,5 +1,8 @@
 import streamlit as st
+import streamlit.components.v1 as components
+
 from src.tournament import simulate_tournament
+from src.bracket import generate_bracket
 
 st.set_page_config(
     page_title="FIFA World Cup 2026 Predictor",
@@ -36,12 +39,14 @@ if page == "🏠 Home":
     st.write("✅ Simulate the entire knockout tournament")
     st.write("✅ View prediction probabilities")
 
+
 # ---------------- MATCH ----------------
 elif page == "⚽ Match Predictor":
 
     st.title("⚽ Match Predictor")
 
     st.info("Coming in the next step!")
+
 
 # ---------------- TOURNAMENT ----------------
 elif page == "🏆 Tournament Simulator":
@@ -54,31 +59,23 @@ elif page == "🏆 Tournament Simulator":
 
         tournament = simulate_tournament()
 
-        for round_name in [
-            "Round of 32",
-            "Round of 16",
-            "Quarterfinals",
-            "Semifinals",
-            "Final"
-        ]:
+        with open("assets/css/bracket.css", "r") as f:
+            css = f.read()
 
-            st.subheader(round_name)
+        html = f"""
+        <style>
+        {css}
+        </style>
 
-            for match in tournament[round_name]:
+        {generate_bracket(tournament)}
+        """
 
-                st.write(
-                    f"**{match['home']}** vs **{match['away']}**"
-                )
+        components.html(
+            html,
+            height=2200,
+            scrolling=True
+        )
 
-                st.success(f"Winner: {match['winner']}")
-
-        st.markdown("---")
-
-        st.header("🏆 FIFA World Cup Champion")
-
-        st.balloons()
-
-        st.success(f"🥇 {tournament['Champion']}")
 
 # ---------------- ABOUT ----------------
 else:
