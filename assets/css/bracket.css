@@ -1,0 +1,44 @@
+.bracket {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.round {
+    display: flex;
+    flex-direction: column;
+}
+
+.round-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.match {
+    background: #20252d;
+    border: 2px solid #3d4652;
+    border-radius: 12px;
+    padding: 12px;
+    width: 250px;
+    margin-bottom: 35px;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.team img {
+    width: 28px;
+    margin-right: 10px;
+}
+
+.winner {
+    color: #22c55e;
+    font-weight: bold;
+}
