@@ -1,3 +1,4 @@
+import random
 import joblib
 import pandas as pd
 
@@ -13,60 +14,90 @@ print("✅ Team encoder loaded successfully!")
 print("✅ Winner encoder loaded successfully!")
 
 
-def predict_match(home_team, away_team, show_probabilities=True):
+def predict_match(home_team, away_team, show_probabilities=True, random_mode=False):
 
-    # Encode teams
     home_encoded = team_encoder.transform([home_team])[0]
     away_encoded = team_encoder.transform([away_team])[0]
 
-    # Create dataframe
     match = pd.DataFrame(
         [[home_encoded, away_encoded]],
         columns=["home_team", "away_team"]
     )
 
-    # Predict
-    prediction = model.predict(match)
-    probabilities = model.predict_proba(match)
+    probabilities = model.predict_proba(match)[0]
 
-    # Show probabilities only if requested
+    labels = list(winner_encoder.classes_)
+
+    home_prob = probabilities[labels.index("Home")]
+    draw_prob = probabilities[labels.index("Draw")]
+    away_prob = probabilities[labels.index("Away")]
+
     if show_probabilities:
         print("\nPrediction Probabilities:")
-        for label, prob in zip(winner_encoder.classes_, probabilities[0]):
-            print(f"{label}: {prob:.2%}")
+        print(f"Home : {home_prob:.2%}")
+        print(f"Draw : {draw_prob:.2%}")
+        print(f"Away : {away_prob:.2%}")
 
-    # Decode result
-    result = winner_encoder.inverse_transform(prediction)[0]
+    # -----------------------
+    # NORMAL MODE
+    # -----------------------
 
-    if result == "Home":
+    if not random_mode:
+
+        prediction = model.predict(match)[0]
+        result = winner_encoder.inverse_transform([prediction])[0]
+
+        if result == "Home":
+            return home_team
+
+        elif result == "Away":
+            return away_team
+
+        else:
+            # knockout draw
+            if home_prob >= away_prob:
+                return home_team
+            else:
+                return away_team
+
+    # -----------------------
+    # RANDOM TOURNAMENT MODE
+    # -----------------------
+
+    outcome = random.choices(
+        ["Home", "Draw", "Away"],
+        weights=[home_prob, draw_prob, away_prob],
+        k=1
+    )[0]
+
+    if outcome == "Home":
         return home_team
 
-    elif result == "Away":
+    elif outcome == "Away":
         return away_team
 
     else:
-        # Knockout tie-break
-        home_prob = probabilities[0][list(winner_encoder.classes_).index("Home")]
-        away_prob = probabilities[0][list(winner_encoder.classes_).index("Away")]
+        # simulate penalties
 
-        if show_probabilities:
-            print("\nMatch drawn after 90 minutes.")
-            print("Penalty Shootout decides the winner!")
+        penalty_winner = random.choices(
+            [home_team, away_team],
+            weights=[home_prob, away_prob],
+            k=1
+        )[0]
 
-        if home_prob >= away_prob:
-            return home_team
-        else:
-            return away_team
+        return penalty_winner
 
 
 if __name__ == "__main__":
 
-    home_team = input("Enter Home Team: ")
-    away_team = input("Enter Away Team: ")
+    home_team = input("Home Team: ")
+    away_team = input("Away Team: ")
 
-    winner = predict_match(home_team, away_team)
+    winner = predict_match(
+        home_team,
+        away_team,
+        show_probabilities=True,
+        random_mode=False
+    )
 
-    print("\n🏆 Match Prediction")
-    print(f"Home Team : {home_team}")
-    print(f"Away Team : {away_team}")
-    print(f"Winner    : {winner}")
+    print("\nWinner:", winner)
