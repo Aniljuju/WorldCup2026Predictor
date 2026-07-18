@@ -9,7 +9,12 @@ def simulate_round(teams, round_name):
         home = teams[i]
         away = teams[i + 1]
 
-        winner = predict_match(home, away, show_probabilities=False)
+        winner = predict_match(
+            home,
+            away,
+            show_probabilities=False,
+            random_mode=True
+        )
 
         matches.append({
             "home": home,
@@ -45,11 +50,35 @@ def simulate_tournament():
 
     tournament = {}
 
-    round16, tournament["Round of 32"] = simulate_round(teams, "Round of 32")
-    quarterfinals, tournament["Round of 16"] = simulate_round(round16, "Round of 16")
-    semifinals, tournament["Quarterfinals"] = simulate_round(quarterfinals, "Quarterfinals")
-    finalists, tournament["Semifinals"] = simulate_round(semifinals, "Semifinals")
-    champion, tournament["Final"] = simulate_round(finalists, "Final")
+    # Round of 32
+    round16, tournament["Round of 32"] = simulate_round(
+        teams,
+        "Round of 32"
+    )
+
+    # Round of 16
+    quarterfinals, tournament["Round of 16"] = simulate_round(
+        round16,
+        "Round of 16"
+    )
+
+    # Quarterfinals
+    semifinals, tournament["Quarterfinals"] = simulate_round(
+        quarterfinals,
+        "Quarterfinals"
+    )
+
+    # Semifinals
+    finalists, tournament["Semifinals"] = simulate_round(
+        semifinals,
+        "Semifinals"
+    )
+
+    # Final
+    champion, tournament["Final"] = simulate_round(
+        finalists,
+        "Final"
+    )
 
     tournament["Champion"] = champion[0]
 
