@@ -231,3 +231,8 @@ body {
         letter-spacing: 1.5px;
     }
 }
+.wc-logo {
+    width: 42px;
+    height: auto;
+    display: block;
+}
